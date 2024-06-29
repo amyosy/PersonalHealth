@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="text-center">
+    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Personal Health Notion Logo" class="img-fluid" style="max-width: 600px;"> <!-- Increased max-width -->
+    <h1 class="mt-1">Welcome to Personal Health Notion</h1>
+    <p>Your personal health tracker and goal setter.</p>
+    <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">Get Started</a>
+</div>
+<div class="row mt-4">
+    <div class="col-md-12">
+        <img src="{{ url_for('static', filename='images/wellness.jpg') }}" alt="Wellness Image" class="img-fluid rounded mx-auto d-block" style="width: 90%; height: auto;">
+    </div>
+</div>
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">Track Your Health Data</h5>
+                <p class="card-text">Input and monitor your health data such as blood pressure, heart rate, weight, and more.</p>
+                <a href="{{ url_for('input_data') }}" class="btn btn-primary">Input Data</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">Set Your Goals</h5>
+                <p class="card-text">Set and achieve your personal health goals to stay motivated and on track.</p>
+                <a href="{{ url_for('goals') }}" class="btn btn-primary">Set Goals</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">View Your Progress</h5>
+                <p class="card-text">View your health data over time through detailed plots and charts.</p>
+                <a href="{{ url_for('plots') }}" class="btn btn-primary">View Plots</a>
+            </div>
+        </div>
+    </div>
+</div>
+<h1 class="mt-5">
+{% endblock %}

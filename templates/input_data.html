@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title text-center">Input Health Data</h2>
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    <div class="form-group mb-3">
+                        {{ form.blood_pressure.label(class="form-control-label") }}
+                        {{ form.blood_pressure(class="form-control") }}
+                    </div>
+                    <div class="form-group mb-3">
+                        {{ form.heart_rate.label(class="form-control-label") }}
+                        {{ form.heart_rate(class="form-control") }}
+                    </div>
+                    <div class="form-group mb-3">
+                        {{ form.weight.label(class="form-control-label") }}
+                        {{ form.weight(class="form-control") }}
+                    </div>
+                    <div class="form-group mb-3">
+                        {{ form.height.label(class="form-control-label") }}
+                        {{ form.height(class="form-control") }}
+                    </div>
+                    <div class="form-group mb-3">
+                        {{ form.sleep.label(class="form-control-label") }}
+                        {{ form.sleep(class="form-control") }}
+                    </div>
+                    <div class="form-group mb-3">
+                        {{ form.stress.label(class="form-control-label") }}
+                        {{ form.stress(class="form-control") }}
+                    </div>
+                    <div class="form-group text-center">
+                        {{ form.submit(class="btn btn-primary mt-3") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
