@@ -1,4 +1,8 @@
 Flask==2.1.1
 Flask-WTF==1.0.1
+Flask-Bcrypt==0.7.1
+Flask-SQLAlchemy==2.5.1
 pytest==7.1.2
 plotly==5.5.0
+psycopg2-binary==2.9.3
+email-validator==1.1.3
