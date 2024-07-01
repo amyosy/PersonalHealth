@@ -2,35 +2,72 @@
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-8">
-        <div class="card">
+        <div class="card mt-4">
             <div class="card-body">
                 <h2 class="card-title text-center">Input Health Data</h2>
                 <form method="POST">
                     {{ form.hidden_tag() }}
-                    <div class="form-group mb-3">
-                        {{ form.blood_pressure.label(class="form-control-label") }}
-                        {{ form.blood_pressure(class="form-control") }}
-                    </div>
-                    <div class="form-group mb-3">
-                        {{ form.heart_rate.label(class="form-control-label") }}
-                        {{ form.heart_rate(class="form-control") }}
-                    </div>
+
                     <div class="form-group mb-3">
                         {{ form.weight.label(class="form-control-label") }}
-                        {{ form.weight(class="form-control") }}
+                        <div class="input-group">
+                            {{ form.weight(class="form-control") }}
+                            <span class="input-group-text">kg</span>
+                        </div>
+                        {% for error in form.weight.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
                     </div>
+
                     <div class="form-group mb-3">
                         {{ form.height.label(class="form-control-label") }}
-                        {{ form.height(class="form-control") }}
+                        <div class="input-group">
+                            {{ form.height(class="form-control") }}
+                            <span class="input-group-text">cm</span>
+                        </div>
+                        {% for error in form.height.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
                     </div>
+
+                    <div class="form-group mb-3">
+                        {{ form.heart_rate.label(class="form-control-label") }}
+                        <div class="input-group">
+                            {{ form.heart_rate(class="form-control") }}
+                            <span class="input-group-text">bpm</span>
+                        </div>
+                        {% for error in form.heart_rate.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="form-group mb-3">
+                        {{ form.blood_pressure.label(class="form-control-label") }}
+                        <div class="input-group">
+                            {{ form.blood_pressure(class="form-control") }}
+                            <span class="input-group-text">mmHg</span>
+                        </div>
+                        {% for error in form.blood_pressure.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
                     <div class="form-group mb-3">
                         {{ form.sleep.label(class="form-control-label") }}
-                        {{ form.sleep(class="form-control") }}
+                        {{ form.sleep(class="form-select") }}
+                        {% for error in form.sleep.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
                     </div>
+
                     <div class="form-group mb-3">
                         {{ form.stress.label(class="form-control-label") }}
-                        {{ form.stress(class="form-control") }}
+                        {{ form.stress(class="form-select") }}
+                        {% for error in form.stress.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
                     </div>
+
                     <div class="form-group text-center">
                         {{ form.submit(class="btn btn-primary mt-3") }}
                     </div>

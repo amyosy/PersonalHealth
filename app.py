@@ -92,13 +92,14 @@ def input_data():
 @login_required
 def goals():
     form = GoalForm()
+    user = User.query.filter_by(username=session['username']).first()
     if form.validate_on_submit():
-        user = User.query.filter_by(username=session['username']).first()
-        goal = Goal(goal=form.goal.data, progress=form.progress.data, user_id=user.id)
+        goal = Goal(title=form.goal_title.data, description=form.goal_description.data,
+                    deadline=form.goal_deadline.data, user_id=user.id)
         db.session.add(goal)
         db.session.commit()
         flash('Goal added successfully!')
-    user = User.query.filter_by(username=session['username']).first()
+        return redirect(url_for('goals'))
     user_goals = Goal.query.filter_by(user_id=user.id).all()
     return render_template('goals.html', form=form, goals=user_goals)
 
@@ -123,7 +124,8 @@ def reminders():
 def dashboard():
     user = User.query.filter_by(username=session['username']).first()
     health_data = HealthData.query.filter_by(user_id=user.id).all()
-    return render_template('dashboard.html', health_data=health_data)
+    user_goals = Goal.query.filter_by(user_id=user.id).all()
+    return render_template('dashboard.html', health_data=health_data, goals=user_goals, username=user.username)
 
 
 @app.route('/plots')

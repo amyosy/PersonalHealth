@@ -1,29 +1,33 @@
 {% extends "base.html" %}
 {% block content %}
- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <div id="dashboard-container" class="container mt-4">
     <h1>Dashboard</h1>
     <p>Welcome to your Personal Health Dashboard. Here you can track and manage your health metrics.</p>
 
     <div class="row">
-        <!-- Card for tracking steps -->
+        {% for item in health_data %}
         <div class="col-md-4">
             <div class="card mb-4">
                 <div class="card-header">
-                    Steps
+                    Health Data #{{ item.id }}
                 </div>
                 <div class="card-body">
-                    <h5 class="card-title">Today's Steps</h5>
-                    <p class="card-text">You have taken 5,432 steps today.</p>
-                    <a href="#" class="btn btn-primary">View Details</a>
+                    <p class="card-text"><strong>Weight:</strong> {{ item.weight }} kg</p>
+                    <p class="card-text"><strong>Height:</strong> {{ item.height }} cm</p>
+                    <p class="card-text"><strong>Heart Rate:</strong> {{ item.heart_rate }} bpm</p>
+                    <p class="card-text"><strong>Blood Pressure:</strong> {{ item.blood_pressure }}</p>
+                    <p class="card-text"><strong>Sleep:</strong> {{ item.sleep }} hours</p>
+                    <p class="card-text"><strong>Stress:</strong> {{ item.stress }} level</p>
                 </div>
             </div>
         </div>
+        {% endfor %}
+    </div>
 
+    <div class="row">
         <!-- Card for tracking sleep -->
         <div class="col-md-4">
-            <div class="card mb-4">
+            <div class="card mb-4 shadow-sm">
                 <div class="card-header">
                     Sleep
                 </div>
@@ -37,7 +41,7 @@
 
         <!-- Card for tracking water intake -->
         <div class="col-md-4">
-            <div class="card mb-4">
+            <div class="card mb-4 shadow-sm">
                 <div class="card-header">
                     Water Intake
                 </div>
@@ -48,12 +52,10 @@
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="row">
         <!-- Card for tracking calories -->
         <div class="col-md-4">
-            <div class="card mb-4">
+            <div class="card mb-4 shadow-sm">
                 <div class="card-header">
                     Calories
                 </div>
@@ -64,10 +66,12 @@
                 </div>
             </div>
         </div>
+    </div>
 
+    <div class="row">
         <!-- Card for tracking exercise -->
         <div class="col-md-4">
-            <div class="card mb-4">
+            <div class="card mb-4 shadow-sm">
                 <div class="card-header">
                     Exercise
                 </div>
@@ -81,7 +85,7 @@
 
         <!-- Card for tracking weight -->
         <div class="col-md-4">
-            <div class="card mb-4">
+            <div class="card mb-4 shadow-sm">
                 <div class="card-header">
                     Weight
                 </div>
@@ -95,4 +99,3 @@
     </div>
 </div>
 {% endblock %}
-

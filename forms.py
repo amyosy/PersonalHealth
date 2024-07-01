@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, FloatField
-from wtforms.validators import DataRequired, Length, Email, EqualTo
+from wtforms import StringField, PasswordField, SubmitField, IntegerField, SelectField, DateField, TextAreaField, \
+    BooleanField, FloatField
+from wtforms.validators import DataRequired, Email, EqualTo, Length, NumberRange
 
 
 class RegistrationForm(FlaskForm):
@@ -23,20 +24,16 @@ class DataForm(FlaskForm):
     heart_rate = IntegerField('Heart Rate', validators=[DataRequired()])
     weight = FloatField('Weight', validators=[DataRequired()])
     height = FloatField('Height', validators=[DataRequired()])
-    sleep = IntegerField('Sleep', validators=[DataRequired()])
-    stress = IntegerField('Stress', validators=[DataRequired()])
+    sleep = SelectField('Sleep', choices=[(str(i), str(i)) for i in range(1, 13)], validators=[DataRequired()])
+    stress = SelectField('Stress', choices=[(str(i), str(i)) for i in range(1, 6)], validators=[DataRequired()])
     submit = SubmitField('Submit Data')
 
 
 class GoalForm(FlaskForm):
-    goal = StringField('Goal', validators=[DataRequired()])
-    progress = StringField('Progress', validators=[DataRequired()])
-    submit = SubmitField('Set Goal')
-
-
-class ReminderForm(FlaskForm):
-    reminder = StringField('Reminder', validators=[DataRequired()])
-    submit = SubmitField('Set Reminder')
+    goal_title = StringField('Goal Title', validators=[DataRequired(), Length(min=2, max=50)])
+    goal_description = TextAreaField('Goal Description', validators=[DataRequired()])
+    goal_deadline = DateField('Goal Deadline', format='%Y-%m-%d', validators=[DataRequired()])
+    submit = SubmitField('Add Goal')
 
 
 class ReminderForm(FlaskForm):
