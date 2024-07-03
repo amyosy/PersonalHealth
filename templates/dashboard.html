@@ -25,48 +25,67 @@
     </div>
 
     <div class="row">
-        <!-- Card for tracking sleep -->
+        <!-- Card for input data -->
         <div class="col-md-4">
             <div class="card mb-4 shadow-sm">
                 <div class="card-header">
-                    Sleep
+                    Input Data
                 </div>
-                <div class="card-body">
-                    <h5 class="card-title">Last Night's Sleep</h5>
-                    <p class="card-text">You slept for 7 hours and 45 minutes.</p>
-                    <a href="#" class="btn btn-primary">View Details</a>
+                <div class="card-body text-center">
+                    <h5 class="card-title">Track Your Health Data</h5>
+                    <p class="card-text">Input your health data such as blood pressure, heart rate, weight, and more.</p>
+                    <a href="{{ url_for('input_data') }}" class="btn btn-primary">Input Data</a>
                 </div>
             </div>
         </div>
 
-        <!-- Card for tracking water intake -->
+        <!-- Card for viewing plots -->
         <div class="col-md-4">
             <div class="card mb-4 shadow-sm">
                 <div class="card-header">
-                    Water Intake
+                    View Plots
                 </div>
-                <div class="card-body">
-                    <h5 class="card-title">Today's Water Intake</h5>
-                    <p class="card-text">You have consumed 1.5 liters of water.</p>
-                    <a href="#" class="btn btn-primary">View Details</a>
+                <div class="card-body text-center">
+                    <h5 class="card-title">View Your Progress</h5>
+                    <p class="card-text">View your health data over time through detailed plots and charts.</p>
+                    <a href="{{ url_for('plots') }}" class="btn btn-primary">View Plots</a>
                 </div>
             </div>
         </div>
-        <!-- Reminders Section -->
+
+        <!-- Card for reminders -->
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    Set Reminders
+                </div>
+                <div class="card-body text-center">
+                    <h5 class="card-title">Set Your Reminders</h5>
+                    <p class="card-text">Set and achieve your personal health goals to stay motivated and on track.</p>
+                    <a href="{{ url_for('reminders') }}" class="btn btn-primary">Set Reminders</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
         <div class="col-md-12">
             <h2>Reminders and Goals</h2>
+            <p>Stay on track with your goals and keep yourself motivated by reviewing your reminders regularly!</p>
             <div class="list-group">
                 {% for reminder in reminders %}
                 <div class="list-group-item list-group-item-action">
                     <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1">{{ reminder.reminder }}</h5>
+                        <p class="mb-1">{{ reminder.reminder }}</p>
                     </div>
                 </div>
                 {% endfor %}
             </div>
         </div>
     </div>
-
+    <div class="text-center">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Personal Health Notion Logo" class="img-fluid" style="max-width: 400px;">
+    </div>
 </div>
-<h1 class="mt-20"></h1>
+<h1 class="mt-5"></h1>
 {% endblock %}

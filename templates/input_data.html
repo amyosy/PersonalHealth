@@ -5,6 +5,7 @@
         <div class="card mt-4">
             <div class="card-body">
                 <h2 class="card-title text-center">Input Health Data</h2>
+                <p class="text-center">Please fill in your health data below to keep track of your progress.</p>
                 <form method="POST">
                     {{ form.hidden_tag() }}
 
@@ -62,7 +63,13 @@
 
                     <div class="form-group mb-3">
                         {{ form.stress.label(class="form-control-label") }}
-                        {{ form.stress(class="form-select") }}
+                        <select name="stress" id="stress" class="form-select">
+                            <option value="1">No Stress</option>
+                            <option value="2">Low Stress</option>
+                            <option value="3">Moderate Stress</option>
+                            <option value="4">High Stress</option>
+                            <option value="5">Extreme High Stress</option>
+                        </select>
                         {% for error in form.stress.errors %}
                             <div class="text-danger">{{ error }}</div>
                         {% endfor %}
@@ -76,4 +83,6 @@
         </div>
     </div>
 </div>
+<h1 class="mt-5"></h1>
 {% endblock %}
+

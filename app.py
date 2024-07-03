@@ -1,7 +1,6 @@
 import io
 from flask import Flask, render_template, redirect, url_for, session, flash, request
 from flask_wtf import FlaskForm
-from sqlalchemy.sql.functions import current_user
 from wtforms.fields.simple import SubmitField
 from forms import RegistrationForm, LoginForm, DataForm, ReminderForm
 from functools import wraps
