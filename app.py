@@ -1,9 +1,14 @@
-from flask import Flask, render_template, redirect, url_for, request, session, flash
-from flask.json import jsonify
-from forms import RegistrationForm, LoginForm, DataForm, GoalForm, ReminderForm
+import io
+from flask import Flask, render_template, redirect, url_for, session, flash, request
+from flask_wtf import FlaskForm
+from sqlalchemy.sql.functions import current_user
+from wtforms.fields.simple import SubmitField
+from forms import RegistrationForm, LoginForm, DataForm, ReminderForm
 from functools import wraps
 from init import create_app, db, bcrypt
-from models import User, HealthData, Goal, Reminder
+from models import User, HealthData, Reminder
+import matplotlib.pyplot as plt
+import base64
 
 app = create_app()
 
@@ -88,22 +93,6 @@ def input_data():
     return render_template('input_data.html', form=form)
 
 
-@app.route('/goals', methods=['GET', 'POST'])
-@login_required
-def goals():
-    form = GoalForm()
-    user = User.query.filter_by(username=session['username']).first()
-    if form.validate_on_submit():
-        goal = Goal(title=form.goal_title.data, description=form.goal_description.data,
-                    deadline=form.goal_deadline.data, user_id=user.id)
-        db.session.add(goal)
-        db.session.commit()
-        flash('Goal added successfully!')
-        return redirect(url_for('goals'))
-    user_goals = Goal.query.filter_by(user_id=user.id).all()
-    return render_template('goals.html', form=form, goals=user_goals)
-
-
 @app.route('/reminders', methods=['GET', 'POST'])
 @login_required
 def reminders():
@@ -124,16 +113,76 @@ def reminders():
 def dashboard():
     user = User.query.filter_by(username=session['username']).first()
     health_data = HealthData.query.filter_by(user_id=user.id).all()
-    user_goals = Goal.query.filter_by(user_id=user.id).all()
-    return render_template('dashboard.html', health_data=health_data, goals=user_goals, username=user.username)
+    reminders = Reminder.query.filter_by(user_id=user.id).all()  # Fetch reminders
+    return render_template('dashboard.html', health_data=health_data, reminders=reminders)
 
 
-@app.route('/plots')
-@login_required
+# FlaskForm für die Plot-Pagination
+class PlotPaginationForm(FlaskForm):
+    weight_submit = SubmitField('Weight')
+    height_submit = SubmitField('Height')
+    heart_rate_submit = SubmitField('Heart Rate')
+    blood_pressure_submit = SubmitField('Blood Pressure')
+    sleep_submit = SubmitField('Sleep')
+    stress_submit = SubmitField('Stress')
+
+
+@app.route('/plots', methods=['GET', 'POST'])
 def plots():
-    user = User.query.filter_by(username=session['username']).first()
-    data = HealthData.query.filter_by(user_id=user.id).all()
-    return render_template('plots.html', data=jsonify(data))
+    form = PlotPaginationForm()
+
+    # Daten für die Plots abrufen
+    page = int(request.args.get('page', 1))  # Aktuelle Seite
+
+    if page == 1:
+        health_data = HealthData.query.with_entities(HealthData.weight).all()
+        plot_title = 'Weight Over Time'
+    elif page == 2:
+        health_data = HealthData.query.with_entities(HealthData.height).all()
+        plot_title = 'Height Over Time'
+    elif page == 3:
+        health_data = HealthData.query.with_entities(HealthData.heart_rate).all()
+        plot_title = 'Heart Rate Over Time'
+    elif page == 4:
+        health_data = HealthData.query.with_entities(HealthData.blood_pressure).all()
+        plot_title = 'Blood Pressure Over Time'
+    elif page == 5:
+        health_data = HealthData.query.with_entities(HealthData.sleep).all()
+        plot_title = 'Sleep Over Time'
+    elif page == 6:
+        health_data = HealthData.query.with_entities(HealthData.stress).all()
+        plot_title = 'Stress Over Time'
+    else:
+        return render_template('error.html', message='Invalid pagination.')
+
+    # Konvertierung der Abfrageergebnisse in eine flache Liste
+    health_data = [value[0] for value in health_data]
+
+    # Mindestens 3 Datensätze benötigt, um Plots zu erstellen
+    if len(health_data) < 3:
+        plots_available = False
+    else:
+        plots_available = True
+
+    if plots_available:
+        # Plots erstellen
+        plt.figure(figsize=(8, 6))
+        plt.plot(health_data)
+        plt.title(plot_title)
+        plt.xlabel('Time')
+        plt.ylabel(plot_title)
+
+        # Speichern des Plots in BytesIO
+        img = io.BytesIO()
+        plt.savefig(img, format='png')
+        img.seek(0)
+        plot_url = base64.b64encode(img.getvalue()).decode()
+        plt.close()
+
+        return render_template('plots.html', form=form, plot_title=plot_title, plot_url=plot_url,
+                               plot_available=plots_available, page=page)
+
+    return render_template('plots.html', form=form, plot_available=plots_available, page=page)
 
 
 if __name__ == '__main__':

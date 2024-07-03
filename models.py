@@ -7,7 +7,6 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
     health_data = db.relationship('HealthData', backref='author', lazy=True)
-    goals = db.relationship('Goal', backref='author', lazy=True)
     reminders = db.relationship('Reminder', backref='author', lazy=True)
 
 
@@ -19,13 +18,6 @@ class HealthData(db.Model):
     height = db.Column(db.Float, nullable=False)
     sleep = db.Column(db.Integer, nullable=False)
     stress = db.Column(db.Integer, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-
-
-class Goal(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    goal = db.Column(db.String(100), nullable=False)
-    progress = db.Column(db.String(100), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 

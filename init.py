@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
+from flask_migrate import Migrate
 import os
 
 db = SQLAlchemy()
@@ -14,9 +15,11 @@ def create_app():
 
     db.init_app(app)
     bcrypt.init_app(app)
+    migrate = Migrate(app, db)
 
     with app.app_context():
-        from models import User, HealthData, Goal, Reminder
+        from forms import RegistrationForm, LoginForm, DataForm, ReminderForm
+        from models import User, HealthData, Reminder
         db.create_all()
 
     return app

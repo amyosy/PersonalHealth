@@ -1,12 +1,51 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-10">
-        <div class="card">
-            <div class="card-body">
-                <h2 class="card-title text-center">Health Data Plots</h2>
-                <div id="plots-container">
-                    <!-- Plotly charts will be rendered here -->
+<div class="container">
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-10">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title text-center">Health Data Plots</h2>
+                    {% if plot_available %}
+                    <div class="row justify-content-center">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h3>{{ plot_title }}</h3>
+                                    <img src="data:image/png;base64,{{ plot_url }}" alt="Health Data Plot" class="img-fluid mx-auto d-block">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center mt-3">
+                        <div class="col-md-12">
+                            <!-- Pagination-Links -->
+                            <nav aria-label="Pagination">
+                                <ul class="pagination justify-content-center">
+                                    {% if page > 1 %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ url_for('plots', page=page-1) }}">Previous</a>
+                                    </li>
+                                    {% endif %}
+                                    {% for num in range(1, 7) %}
+                                    <li class="page-item {% if num == page %}active{% endif %}">
+                                        <a class="page-link" href="{{ url_for('plots', page=num) }}">{{ num }}</a>
+                                    </li>
+                                    {% endfor %}
+                                    {% if page < 6 %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ url_for('plots', page=page+1) }}">Next</a>
+                                    </li>
+                                    {% endif %}
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-warning text-center mt-4" role="alert">
+                        <p>No health data available to plot. Please add at least 3 health data entries.</p>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
