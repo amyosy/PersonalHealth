@@ -3,6 +3,7 @@ from wtforms import StringField, PasswordField, SubmitField, IntegerField, Selec
 from wtforms.validators import DataRequired, Email, EqualTo, Length, NumberRange
 
 
+# Registrierungsformular
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
     email = StringField('Email', validators=[DataRequired(), Email()])
@@ -11,6 +12,7 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Sign Up')
 
 
+# Loginformular
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
     password = PasswordField('Password', validators=[DataRequired()])
@@ -18,6 +20,7 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Login')
 
 
+# Datenformular
 class DataForm(FlaskForm):
     blood_pressure = StringField('Blood Pressure', validators=[DataRequired()])
     heart_rate = IntegerField('Heart Rate', validators=[DataRequired()])
@@ -28,6 +31,17 @@ class DataForm(FlaskForm):
     submit = SubmitField('Submit Data')
 
 
+# Formular für die Plot-Pagination
+class PlotPaginationForm(FlaskForm):
+    weight_submit = SubmitField('Weight')
+    height_submit = SubmitField('Height')
+    heart_rate_submit = SubmitField('Heart Rate')
+    blood_pressure_submit = SubmitField('Blood Pressure')
+    sleep_submit = SubmitField('Sleep')
+    stress_submit = SubmitField('Stress')
+
+
+# Erinnerungsformular
 class ReminderForm(FlaskForm):
     reminder = StringField('Reminder', validators=[DataRequired()])
     submit = SubmitField('Add Reminder')

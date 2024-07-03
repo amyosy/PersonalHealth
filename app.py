@@ -1,17 +1,20 @@
+# Importieren der notwendigen Module
 import io
 from flask import Flask, render_template, redirect, url_for, session, flash, request
 from flask_wtf import FlaskForm
 from wtforms.fields.simple import SubmitField
-from forms import RegistrationForm, LoginForm, DataForm, ReminderForm
+from forms import RegistrationForm, LoginForm, DataForm, ReminderForm, PlotPaginationForm
 from functools import wraps
 from init import create_app, db, bcrypt
 from models import User, HealthData, Reminder
 import matplotlib.pyplot as plt
 import base64
 
+# Erstellen der Flask-App mit den Konfigurationen aus create_app()
 app = create_app()
 
 
+# Dekorator, um sicherzustellen, dass bestimmte Routen nur von eingeloggten Benutzern aufgerufen werden können
 def login_required(f):
     @wraps(f)
     def wrap(*args, **kwargs):
@@ -24,20 +27,23 @@ def login_required(f):
     return wrap
 
 
+# Route für die Startseite der Anwendung
 @app.route('/')
 def index():
     return render_template('index.html')
 
 
+# Route für die Registrierung neuer Benutzer
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        # Passwort-Hashing
         username = form.username.data
+        # Überprüfen, ob der Benutzername bereits existiert
         if User.query.filter_by(username=username).first():
             flash('Username already exists.')
         else:
+            # Hashen des Passworts
             hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
             # Erstellen eines neuen Benutzers mit dem gehashten Passwort
             user = User(username=username, email=form.email.data, password=hashed_password)
@@ -48,11 +54,13 @@ def register():
     return render_template('register.html', form=form)
 
 
+# Route für das Login der Benutzer
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
+        # Überprüfen der Benutzerdaten und des Passworts
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             session['logged_in'] = True
             session['username'] = user.username
@@ -63,6 +71,7 @@ def login():
     return render_template('login.html', form=form)
 
 
+# Route für das Logout der Benutzer
 @app.route('/logout')
 @login_required
 def logout():
@@ -71,12 +80,14 @@ def logout():
     return redirect(url_for('index'))
 
 
+# Route für die Eingabe von Gesundheitsdaten
 @app.route('/input_data', methods=['GET', 'POST'])
 @login_required
 def input_data():
     form = DataForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=session['username']).first()
+        # Erstellen eines neuen HealthData-Datensatzes
         health_data = HealthData(
             blood_pressure=form.blood_pressure.data,
             heart_rate=form.heart_rate.data,
@@ -92,12 +103,14 @@ def input_data():
     return render_template('input_data.html', form=form)
 
 
+# Route für die Verwaltung von Erinnerungen
 @app.route('/reminders', methods=['GET', 'POST'])
 @login_required
 def reminders():
     form = ReminderForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=session['username']).first()
+        # Erstellen eines neuen Reminder-Datensatzes
         reminder = Reminder(reminder=form.reminder.data, user_id=user.id)
         db.session.add(reminder)
         db.session.commit()
@@ -107,6 +120,7 @@ def reminders():
     return render_template('reminders.html', form=form, reminders=user_reminders)
 
 
+# Route für das Dashboard, das Gesundheitsdaten und Erinnerungen anzeigt
 @app.route('/dashboard')
 @login_required
 def dashboard():
@@ -116,23 +130,15 @@ def dashboard():
     return render_template('dashboard.html', health_data=health_data, reminders=reminders)
 
 
-# FlaskForm für die Plot-Pagination
-class PlotPaginationForm(FlaskForm):
-    weight_submit = SubmitField('Weight')
-    height_submit = SubmitField('Height')
-    heart_rate_submit = SubmitField('Heart Rate')
-    blood_pressure_submit = SubmitField('Blood Pressure')
-    sleep_submit = SubmitField('Sleep')
-    stress_submit = SubmitField('Stress')
-
-
+# Route für die Erstellung und Anzeige von Plots der Gesundheitsdaten
 @app.route('/plots', methods=['GET', 'POST'])
 def plots():
     form = PlotPaginationForm()
 
-    # Daten für die Plots abrufen
-    page = int(request.args.get('page', 1))  # Aktuelle Seite
+    # Aktuelle Seite für die Pagination bestimmen
+    page = int(request.args.get('page', 1))
 
+    # Abrufen der Daten für die Plots basierend auf der aktuellen Seite
     if page == 1:
         health_data = HealthData.query.with_entities(HealthData.weight).all()
         plot_title = 'Weight Over Time'
@@ -154,17 +160,17 @@ def plots():
     else:
         return render_template('error.html', message='Invalid pagination.')
 
-    # Konvertierung der Abfrageergebnisse in eine flache Liste
+    # Konvertieren der Abfrageergebnisse in eine flache Liste
     health_data = [value[0] for value in health_data]
 
-    # Mindestens 3 Datensätze benötigt, um Plots zu erstellen
+    # Überprüfen, ob genügend Daten vorhanden sind, um Plots zu erstellen
     if len(health_data) < 3:
         plots_available = False
     else:
         plots_available = True
 
     if plots_available:
-        # Plots erstellen
+        # Erstellen des Plots
         plt.figure(figsize=(8, 6))
         plt.plot(health_data)
         plt.title(plot_title)
@@ -181,8 +187,7 @@ def plots():
         return render_template('plots.html', form=form, plot_title=plot_title, plot_url=plot_url,
                                plot_available=plots_available, page=page)
 
-    return render_template('plots.html', form=form, plot_available=plots_available, page=page)
 
-
+# Starten der Flask-Anwendung im Debug-Modus
 if __name__ == '__main__':
     app.run(debug=True)

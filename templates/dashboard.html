@@ -6,11 +6,10 @@
 
     <div class="row">
         {% for item in health_data %}
+        <!-- Karte für jedes Gesundheitsdaten-Item -->
         <div class="col-md-4">
             <div class="card mb-4">
-                <div class="card-header">
-                    Health Data #{{ item.id }}
-                </div>
+                <div class="card-header">Health Data #{{ item.id }}</div>
                 <div class="card-body">
                     <p class="card-text"><strong>Weight:</strong> {{ item.weight }} kg</p>
                     <p class="card-text"><strong>Height:</strong> {{ item.height }} cm</p>
@@ -25,12 +24,10 @@
     </div>
 
     <div class="row">
-        <!-- Card for input data -->
+        <!-- Karte zum Eingeben von Daten -->
         <div class="col-md-4">
             <div class="card mb-4 shadow-sm">
-                <div class="card-header">
-                    Input Data
-                </div>
+                <div class="card-header">Input Data</div>
                 <div class="card-body text-center">
                     <h5 class="card-title">Track Your Health Data</h5>
                     <p class="card-text">Input your health data such as blood pressure, heart rate, weight, and more.</p>
@@ -39,12 +36,10 @@
             </div>
         </div>
 
-        <!-- Card for viewing plots -->
+        <!-- Karte zum Ansehen von Diagrammen -->
         <div class="col-md-4">
             <div class="card mb-4 shadow-sm">
-                <div class="card-header">
-                    View Plots
-                </div>
+                <div class="card-header">View Plots</div>
                 <div class="card-body text-center">
                     <h5 class="card-title">View Your Progress</h5>
                     <p class="card-text">View your health data over time through detailed plots and charts.</p>
@@ -53,12 +48,10 @@
             </div>
         </div>
 
-        <!-- Card for reminders -->
+        <!-- Karte zum Einstellen von Erinnerungen -->
         <div class="col-md-4">
             <div class="card mb-4 shadow-sm">
-                <div class="card-header">
-                    Set Reminders
-                </div>
+                <div class="card-header">Set Reminders</div>
                 <div class="card-body text-center">
                     <h5 class="card-title">Set Your Reminders</h5>
                     <p class="card-text">Set and achieve your personal health goals to stay motivated and on track.</p>
@@ -69,6 +62,7 @@
     </div>
 
     <div class="row">
+        <!-- Erinnerungen und Ziele anzeigen -->
         <div class="col-md-12">
             <h2>Reminders and Goals</h2>
             <p>Stay on track with your goals and keep yourself motivated by reviewing your reminders regularly!</p>
@@ -87,5 +81,5 @@
         <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Personal Health Notion Logo" class="img-fluid" style="max-width: 400px;">
     </div>
 </div>
-<h1 class="mt-5"></h1>
 {% endblock %}
+
