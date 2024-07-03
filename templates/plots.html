@@ -1,30 +1,56 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container mt-4">
-    <h1>Health Data Plots</h1>
-    <p>View your health data trends over time.</p>
-    <div class="row">
-        <!-- Plots anzeigen -->
-        <div class="col-md-6">
-            <h3>Weight</h3>
-            <img src="{{ url_for('static', filename='images/weight_plot.png') }}" alt="Weight Plot" class="img-fluid">
-        </div>
-        <div class="col-md-6">
-            <h3>Heart Rate</h3>
-            <img src="{{ url_for('static', filename='images/heart_rate_plot.png') }}" alt="Heart Rate Plot" class="img-fluid">
-        </div>
-        <div class="col-md-6">
-            <h3>Blood Pressure</h3>
-            <img src="{{ url_for('static', filename='images/blood_pressure_plot.png') }}" alt="Blood Pressure Plot" class="img-fluid">
-        </div>
-        <div class="col-md-6">
-            <h3>Sleep</h3>
-            <img src="{{ url_for('static', filename='images/sleep_plot.png') }}" alt="Sleep Plot" class="img-fluid">
-        </div>
-        <div class="col-md-6">
-            <h3>Stress</h3>
-            <img src="{{ url_for('static', filename='images/stress_plot.png') }}" alt="Stress Plot" class="img-fluid">
+<div class="container">
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-10">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title text-center">Health Data Plots</h2>
+                    <p class="text-center">Visualize your health data trends to stay informed about your progress over time.</p>
+                    {% if plot_available %}
+                    <div class="row justify-content-center">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h3>{{ plot_title }}</h3>
+                                    <img src="data:image/png;base64,{{ plot_url }}" alt="Health Data Plot" class="img-fluid mx-auto d-block">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center mt-3">
+                        <div class="col-md-12">
+                            <!-- Pagination-Links -->
+                            <nav aria-label="Pagination">
+                                <ul class="pagination justify-content-center">
+                                    {% if page > 1 %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ url_for('plots', page=page-1) }}">Previous</a>
+                                    </li>
+                                    {% endif %}
+                                    {% for num in range(1, 7) %}
+                                    <li class="page-item {% if num == page %}active{% endif %}">
+                                        <a class="page-link" href="{{ url_for('plots', page=num) }}">{{ num }}</a>
+                                    </li>
+                                    {% endfor %}
+                                    {% if page < 6 %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ url_for('plots', page=page+1) }}">Next</a>
+                                    </li>
+                                    {% endif %}
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-warning text-center mt-4" role="alert">
+                        <p>No health data available to plot. Please add at least 3 health data entries.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
         </div>
     </div>
 </div>
+<h1 class="mt-5"></h1>
 {% endblock %}

@@ -1,47 +1,90 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container mt-4">
-    <h1>Input Your Health Data</h1>
-    <p>Track your health metrics by inputting your data below.</p>
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">Health Data Input</div>
-                <div class="card-body">
-                    <!-- Formular zum Eingeben der Gesundheitsdaten -->
-                    <form method="POST" action="{{ url_for('input_data') }}">
-                        <div class="form-group">
-                            <label for="weight">Weight (kg)</label>
-                            <input type="number" step="0.1" class="form-control" id="weight" name="weight" required>
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card mt-4">
+            <div class="card-body">
+                <h2 class="card-title text-center">Input Health Data</h2>
+                <p class="text-center">Please fill in your health data below to keep track of your progress.</p>
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+
+                    <div class="form-group mb-3">
+                        {{ form.weight.label(class="form-control-label") }}
+                        <div class="input-group">
+                            {{ form.weight(class="form-control") }}
+                            <span class="input-group-text">kg</span>
                         </div>
-                        <div class="form-group">
-                            <label for="height">Height (cm)</label>
-                            <input type="number" step="0.1" class="form-control" id="height" name="height" required>
+                        {% for error in form.weight.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="form-group mb-3">
+                        {{ form.height.label(class="form-control-label") }}
+                        <div class="input-group">
+                            {{ form.height(class="form-control") }}
+                            <span class="input-group-text">cm</span>
                         </div>
-                        <div class="form-group">
-                            <label for="heart_rate">Heart Rate (bpm)</label>
-                            <input type="number" class="form-control" id="heart_rate" name="heart_rate" required>
+                        {% for error in form.height.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="form-group mb-3">
+                        {{ form.heart_rate.label(class="form-control-label") }}
+                        <div class="input-group">
+                            {{ form.heart_rate(class="form-control") }}
+                            <span class="input-group-text">bpm</span>
                         </div>
-                        <div class="form-group">
-                            <label for="blood_pressure">Blood Pressure</label>
-                            <input type="text" class="form-control" id="blood_pressure" name="blood_pressure" required>
+                        {% for error in form.heart_rate.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="form-group mb-3">
+                        {{ form.blood_pressure.label(class="form-control-label") }}
+                        <div class="input-group">
+                            {{ form.blood_pressure(class="form-control") }}
+                            <span class="input-group-text">mmHg</span>
                         </div>
-                        <div class="form-group">
-                            <label for="sleep">Sleep (hours)</label>
-                            <input type="number" step="0.1" class="form-control" id="sleep" name="sleep" required>
+                        {% for error in form.blood_pressure.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="form-group mb-3">
+                        {{ form.sleep.label(class="form-control-label") }}
+                        <div class="input-group">
+                            {{ form.sleep(class="form-select") }}
+                            <span class="input-group-text">hours</span>
                         </div>
-                        <div class="form-group">
-                            <label for="stress">Stress Level (1-10)</label>
-                            <input type="number" min="1" max="10" class="form-control" id="stress" name="stress" required>
-                        </div>
-                        <div class="form-group mt-3">
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </div>
-                    </form>
-                </div>
+                        {% for error in form.sleep.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="form-group mb-3">
+                        {{ form.stress.label(class="form-control-label") }}
+                        <select name="stress" id="stress" class="form-select">
+                            <option value="1">No Stress</option>
+                            <option value="2">Low Stress</option>
+                            <option value="3">Moderate Stress</option>
+                            <option value="4">High Stress</option>
+                            <option value="5">Extreme High Stress</option>
+                        </select>
+                        {% for error in form.stress.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="form-group text-center">
+                        {{ form.submit(class="btn btn-primary mt-3") }}
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
+<h1 class="mt-5"></h1>
 {% endblock %}
-

@@ -1,43 +1,23 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container mt-4">
-    <h1>Set Reminders</h1>
-    <p>Stay on track by setting reminders for your health goals.</p>
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">Add New Reminder</div>
-                <div class="card-body">
-                    <!-- Formular zum Hinzufügen einer neuen Erinnerung -->
-                    <form method="POST" action="{{ url_for('reminders') }}">
-                        <div class="form-group">
-                            <label for="reminder">Reminder</label>
-                            <input type="text" class="form-control" id="reminder" name="reminder" required>
-                        </div>
-                        <div class="form-group mt-3">
-                            <button type="submit" class="btn btn-primary">Add Reminder</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Liste der bestehenden Erinnerungen -->
-    <div class="row mt-4">
-        <div class="col-md-12">
-            <h2>Existing Reminders</h2>
-            <div class="list-group">
-                {% for reminder in reminders %}
-                <div class="list-group-item list-group-item-action">
-                    <div class="d-flex w-100 justify-content-between">
-                        <p class="mb-1">{{ reminder.reminder }}</p>
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title text-center">Add Reminders</h2>
+                <p class="text-center">Set reminders to stay on track with your health goals!</p>
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    <div class="form-group mb-3">
+                        {{ form.reminder.label(class="form-control-label") }}
+                        {{ form.reminder(class="form-control") }}
                     </div>
-                </div>
-                {% endfor %}
+                    <div class="form-group text-center">
+                        {{ form.submit(class="btn btn-primary mt-3") }}
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
 {% endblock %}
-
